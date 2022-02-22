@@ -1,0 +1,11 @@
+framework module QcmpSDK {
+  umbrella header "QcmpSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module QcmpSDK.Swift {
+    header "QcmpSDK-Swift.h"
+    requires objc
+}

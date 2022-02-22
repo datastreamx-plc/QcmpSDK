@@ -1,0 +1,129 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target arm64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name QcmpSDK
+import AMShimmer
+import AdSupport
+import AppTrackingTransparency
+import CoreLocation
+import Foundation
+import PKHUD
+@_exported import QcmpSDK
+import Swift
+import SwiftJWT
+import UIKit
+public typealias ConsentCallback = (Swift.Result<QcmpSDK.ChosenConsent, QcmpSDK.ComplianceError>) -> Swift.Void
+public enum ComplianceError : Swift.Error, Foundation.LocalizedError {
+  case unknown
+  case message(Swift.String)
+  public var message: Swift.String {
+    get
+  }
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum ChosenConsent : Swift.String {
+  case gdprAccept, ccpaAccept, gdprDecline, ccpaDecline, notConsent
+  public typealias RawValue = Swift.String
+  public init?(rawValue: Swift.String)
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public protocol ComplianceDelegate : QcmpSDK.LocationServiceDelegate {
+  func qcmpControllreParent() -> UIKit.UIViewController?
+}
+@_hasMissingDesignatedInitializers final public class Compliance {
+  public static var shared: QcmpSDK.Compliance
+  weak final public var delegate: QcmpSDK.ComplianceDelegate? {
+    get
+    set
+  }
+  final public var tcfString: Swift.String? {
+    get
+  }
+  final public var usPrivacyString: Swift.String? {
+    get
+  }
+  final public var consentOpt: Swift.String? {
+    get
+  }
+  final public func setup(_ integrationKey: Swift.String)
+  final public func openConsentFormIfNeeded(callback: @escaping (Swift.Result<QcmpSDK.ChosenConsent, QcmpSDK.ComplianceError>) -> Swift.Void)
+  final public func openConsentForm(complianceType: QcmpSDK.ComplianceType, callback: @escaping (Swift.Result<QcmpSDK.ChosenConsent, QcmpSDK.ComplianceError>) -> Swift.Void)
+  final public func requestCompliance(requestType: QcmpSDK.ComplianceRequestType, completionHandler: @escaping (Swift.Result<Swift.Void, QcmpSDK.ComplianceError>) -> Swift.Void)
+  @objc deinit
+}
+public protocol LocationServiceDelegate : AnyObject {
+  func qcmpControllreParent() -> UIKit.UIViewController?
+}
+public enum LocationError : Swift.Error, Foundation.LocalizedError {
+  case cantGetLocation
+  case placemarkError(Swift.String)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class LocationService : ObjectiveC.NSObject, CoreLocation.CLLocationManagerDelegate {
+  @objc public func locationManager(_ manager: CoreLocation.CLLocationManager, didUpdateLocations locations: [CoreLocation.CLLocation])
+  @objc public func locationManager(_ manager: CoreLocation.CLLocationManager, didFailWithError error: Swift.Error)
+  @objc public func locationManagerDidChangeAuthorization(_ manager: CoreLocation.CLLocationManager)
+  public func requestUpdatedPlacemark(onComplete: @escaping (Swift.Result<CoreLocation.CLPlacemark, QcmpSDK.LocationError>) -> Swift.Void)
+  @objc deinit
+}
+public enum ComplianceType {
+  case GDPR
+  case CCPA
+  public static func == (a: QcmpSDK.ComplianceType, b: QcmpSDK.ComplianceType) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public enum ConsentType : Swift.String {
+  case none
+  case P
+  case LI
+  case F
+  case SP
+  case SF
+  public typealias RawValue = Swift.String
+  public init?(rawValue: Swift.String)
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum ComplianceRequestType : Swift.String, Swift.Codable {
+  case REQUEST_OPTOUT
+  case REQUEST_DO_NOT_SELL
+  case REQUEST_DELETE_DATA
+  case REQUEST_ACCESS_DATA
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+}
+public protocol ImagePickerDelegate : AnyObject {
+  func didSelect(image: UIKit.UIImage?)
+}
+@objc open class ImagePicker : ObjectiveC.NSObject {
+  public init(presentationController: UIKit.UIViewController, delegate: QcmpSDK.ImagePickerDelegate)
+  public func present(from sourceView: UIKit.UIView)
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension ImagePicker : UIKit.UIImagePickerControllerDelegate {
+  @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
+  @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
+}
+extension ImagePicker : UIKit.UINavigationControllerDelegate {
+}
+extension QcmpSDK.ChosenConsent : Swift.Equatable {}
+extension QcmpSDK.ChosenConsent : Swift.Hashable {}
+extension QcmpSDK.ChosenConsent : Swift.RawRepresentable {}
+extension QcmpSDK.ComplianceType : Swift.Equatable {}
+extension QcmpSDK.ComplianceType : Swift.Hashable {}
+extension QcmpSDK.ConsentType : Swift.Equatable {}
+extension QcmpSDK.ConsentType : Swift.Hashable {}
+extension QcmpSDK.ConsentType : Swift.RawRepresentable {}
+extension QcmpSDK.ComplianceRequestType : Swift.Equatable {}
+extension QcmpSDK.ComplianceRequestType : Swift.Hashable {}
+extension QcmpSDK.ComplianceRequestType : Swift.RawRepresentable {}

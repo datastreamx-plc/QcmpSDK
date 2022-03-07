@@ -8,21 +8,24 @@
 
 Pod::Spec.new do |spec|
 
-  spec.name         = "QcmpSDK"
-  spec.version      = "1.0.0"
-  spec.summary      = "QcmpSDK"
-  spec.description  = <<-DESC
+  spec.name                     = "QcmpSDK"
+  spec.version                  = "1.0.0"
+  spec.summary                  = "QcmpSDK"
+  spec.description              = <<-DESC
   QcmpSDK from Quadrant.io
-                   DESC
+  DESC
+  
+  spec.homepage                 = "https://www.quadrant.io"
+  spec.license                  = "MIT"
+  spec.author                   = { "Syaiful Amin" => "syaiful@quadrant.io" }
+  spec.source                   = { git: "https://github.com/datastreamx-plc/QcmpSDK.git", tag: "#{spec.version}" }
+  spec.swift_versions           = '5.0'
+  spec.ios.deployment_target    = '11.0'
+  spec.ios.vendored_frameworks  = 'QcmpSDK.xcframework'
 
-  spec.homepage     = "https://www.quadrant.io"
-  spec.license      = "MIT"
-  spec.author       = { "Syaiful Amin" => "syaiful@quadrant.io" }
-  spec.source       = { git: "https://github.com/syaifulQ/QcmpSDK.git", tag: "#{spec.version}" }
-  spec.ios.deployment_target = '11.0'
-  spec.ios.vendored_frameworks = 'QcmpSDK.xcframework'
-spec.dependency 'AMShimmer'
-spec.dependency 'SwiftJWT'
-spec.dependency 'PKHUD'
-
+  spec.dependency 'AMShimmer'
+  spec.dependency 'SwiftJWT'
+  spec.dependency 'PKHUD'
+  
+  
 end

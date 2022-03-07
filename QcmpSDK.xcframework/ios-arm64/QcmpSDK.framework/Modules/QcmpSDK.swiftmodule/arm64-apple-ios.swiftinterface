@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
 // swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name QcmpSDK
 import AMShimmer
 import AdSupport
@@ -11,6 +11,7 @@ import PKHUD
 import Swift
 import SwiftJWT
 import UIKit
+import _Concurrency
 public typealias ConsentCallback = (Swift.Result<QcmpSDK.ChosenConsent, QcmpSDK.ComplianceError>) -> Swift.Void
 public enum ComplianceError : Swift.Error, Foundation.LocalizedError {
   case unknown
@@ -24,21 +25,14 @@ public enum ComplianceError : Swift.Error, Foundation.LocalizedError {
 }
 public enum ChosenConsent : Swift.String {
   case gdprAccept, ccpaAccept, gdprDecline, ccpaDecline, notConsent
-  public typealias RawValue = Swift.String
   public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
   }
 }
-public protocol ComplianceDelegate : QcmpSDK.LocationServiceDelegate {
-  func qcmpControllreParent() -> UIKit.UIViewController?
-}
 @_hasMissingDesignatedInitializers final public class Compliance {
   public static var shared: QcmpSDK.Compliance
-  weak final public var delegate: QcmpSDK.ComplianceDelegate? {
-    get
-    set
-  }
   final public var tcfString: Swift.String? {
     get
   }
@@ -54,9 +48,6 @@ public protocol ComplianceDelegate : QcmpSDK.LocationServiceDelegate {
   final public func requestCompliance(requestType: QcmpSDK.ComplianceRequestType, completionHandler: @escaping (Swift.Result<Swift.Void, QcmpSDK.ComplianceError>) -> Swift.Void)
   @objc deinit
 }
-public protocol LocationServiceDelegate : AnyObject {
-  func qcmpControllreParent() -> UIKit.UIViewController?
-}
 public enum LocationError : Swift.Error, Foundation.LocalizedError {
   case cantGetLocation
   case placemarkError(Swift.String)
@@ -68,14 +59,14 @@ public enum LocationError : Swift.Error, Foundation.LocalizedError {
   public func requestUpdatedPlacemark(onComplete: @escaping (Swift.Result<CoreLocation.CLPlacemark, QcmpSDK.LocationError>) -> Swift.Void)
   @objc deinit
 }
-public enum ComplianceType {
+public enum ComplianceType : Swift.Int {
   case GDPR
   case CCPA
-  public static func == (a: QcmpSDK.ComplianceType, b: QcmpSDK.ComplianceType) -> Swift.Bool
-  public var hashValue: Swift.Int {
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
 }
 public enum ConsentType : Swift.String {
   case none
@@ -84,8 +75,8 @@ public enum ConsentType : Swift.String {
   case F
   case SP
   case SF
-  public typealias RawValue = Swift.String
   public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
   }
@@ -95,11 +86,11 @@ public enum ComplianceRequestType : Swift.String, Swift.Codable {
   case REQUEST_DO_NOT_SELL
   case REQUEST_DELETE_DATA
   case REQUEST_ACCESS_DATA
+  public init?(rawValue: Swift.String)
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
   }
-  public init?(rawValue: Swift.String)
 }
 public protocol ImagePickerDelegate : AnyObject {
   func didSelect(image: UIKit.UIImage?)
@@ -107,20 +98,20 @@ public protocol ImagePickerDelegate : AnyObject {
 @objc open class ImagePicker : ObjectiveC.NSObject {
   public init(presentationController: UIKit.UIViewController, delegate: QcmpSDK.ImagePickerDelegate)
   public func present(from sourceView: UIKit.UIView)
-  @objc override dynamic public init()
   @objc deinit
 }
-extension ImagePicker : UIKit.UIImagePickerControllerDelegate {
-  @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
-  @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
+extension QcmpSDK.ImagePicker : UIKit.UIImagePickerControllerDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
 }
-extension ImagePicker : UIKit.UINavigationControllerDelegate {
+extension QcmpSDK.ImagePicker : UIKit.UINavigationControllerDelegate {
 }
 extension QcmpSDK.ChosenConsent : Swift.Equatable {}
 extension QcmpSDK.ChosenConsent : Swift.Hashable {}
 extension QcmpSDK.ChosenConsent : Swift.RawRepresentable {}
 extension QcmpSDK.ComplianceType : Swift.Equatable {}
 extension QcmpSDK.ComplianceType : Swift.Hashable {}
+extension QcmpSDK.ComplianceType : Swift.RawRepresentable {}
 extension QcmpSDK.ConsentType : Swift.Equatable {}
 extension QcmpSDK.ConsentType : Swift.Hashable {}
 extension QcmpSDK.ConsentType : Swift.RawRepresentable {}

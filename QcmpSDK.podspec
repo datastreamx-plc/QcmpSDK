@@ -9,7 +9,7 @@
 Pod::Spec.new do |spec|
 
   spec.name                     = "QcmpSDK"
-  spec.version                  = "1.0.0"
+  spec.version                  = "1.0.21"
   spec.summary                  = "QcmpSDK"
   spec.description              = <<-DESC
   QcmpSDK from Quadrant.io
